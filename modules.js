@@ -52,7 +52,7 @@ const getImageUrl = (parameters) => {
     const query = makeQuery(parameters);
 
     return `${urlPrefix}?q=${query}&cx=${cx}&key=${key}&num=${number}&imgSize=${imgSize}&searchType=${searchType}`;
-} 
+}
 
 module.exports = {
     getPerson,

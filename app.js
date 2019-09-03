@@ -3,10 +3,10 @@
 
 const express = require('express');
 const path = require(`path`);
-const https = require('https');
 const bodyParser = require('body-parser');
 const modules = require('./modules.js');
 const language = require('@google-cloud/language');
+const axios = require('axios');
 
 // Creates a client
 const client = new language.LanguageServiceClient();
@@ -30,28 +30,27 @@ app.post('/submit', async (req, res) => {
   const person = modules.getPerson(result.entities);
   const nouns = modules.findNouns(syntax);
   const imageEndpoint = modules.getImageUrl(nouns);
-  let image;
 
-  res.send({
-    name: person.name,
-    salience: person.salience,
-    imageEndpoint
-  });
-
-  https.get(imageEndpoint, (resp) => {
-    let data = '';
-
-    // A chunk of data has been recieved.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    resp.on('end', () => {
-      image = JSON.parse(data).items[0].link;
-      console.log(image);
-    });
-  }).on("error", (err) => {
-    console.log("Error: " + err.message);
+  const getImageQuery = async (imageEndpoint) => {
+    try {
+        return await axios.get(imageEndpoint);
+    } catch (error) {
+        console.error(error)
+    }
+  }
+  
+  const image = getImageQuery(imageEndpoint)
+    .then(response => {
+      if (response.data) {
+        res.send({
+          name: person.name,
+          salience: person.salience,
+          imageEndpoint: response.data.items[0].link
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error)
   });
 });
 
