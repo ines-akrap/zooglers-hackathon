@@ -1,3 +1,5 @@
+const map = require('./mapping.js');
+
 // Find person with the highest salience in the paragraph
 const getPerson = (entities) => {
     const persons = entities.filter((entity) => {
@@ -54,9 +56,25 @@ const getImageUrl = (parameters) => {
     return `${urlPrefix}?q=${query}&cx=${cx}&key=${key}&num=${number}&imgSize=${imgSize}&searchType=${searchType}`;
 }
 
+const getImageFromMap = (params) => {
+    const imageTag = [];
+    params.forEach((param) => {
+        console.log(param);
+        const taggedImage = map.imageMap.images.find((image) => {
+            return image.tags === param;
+        });
+        if (taggedImage) {
+            imageTag.push(taggedImage);
+        };
+    })
+    if (imageTag.length === 0) return false;
+    return imageTag[0];
+}
+
 module.exports = {
     getPerson,
     findPerson, 
     findNouns,
-    getImageUrl
+    getImageUrl,
+    getImageFromMap
 }

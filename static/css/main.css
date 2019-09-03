@@ -18,3 +18,7 @@ body {
     width: 300px;
     word-break: break-word;
 }
+
+.image {
+    max-width: 400px;
+}

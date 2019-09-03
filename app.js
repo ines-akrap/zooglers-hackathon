@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 app.post('/submit', async (req, res) => {
   const document = {
-    content: req.body.paragraph,
+    content: req.body.input,
     type: 'PLAIN_TEXT',
   };
   
@@ -29,30 +29,41 @@ app.post('/submit', async (req, res) => {
   const [syntax] = await client.analyzeSyntax({document});
   
   const person = modules.getPerson(result.entities);
-  const nouns = modules.findNouns(syntax);
-  const imageEndpoint = modules.getImageUrl(nouns);
+  const nouns = modules.findNouns(syntax);  
+  console.log(person);
 
-  const getImageQuery = async (imageEndpoint) => {
-    try {
-        return await axios.get(imageEndpoint);
-    } catch (error) {
-        console.error(error)
-    }
-  }
-  
-  const image = getImageQuery(imageEndpoint)
-    .then(response => {
-      if (response.data) {
-        res.send({
-          name: person.name,
-          salience: person.salience,
-          imageEndpoint: response.data.items[0].link
-        });
+  const image = await modules.getImageFromMap(nouns);
+  if (image) {
+    res.send({
+      name: person.name,
+      about: nouns,
+      imageEndpoint: image.image
+    });
+  } else {
+    const imageEndpoint = modules.getImageUrl(nouns);
+
+    const getImageQuery = async (imageEndpoint) => {
+      try {
+          return await axios.get(imageEndpoint);
+      } catch (error) {
+          console.error(error)
       }
-    })
-    .catch(error => {
-      console.log(error)
-  });
+    }
+  
+    const image = getImageQuery(imageEndpoint)
+      .then(response => {
+        if (response.data) {
+          res.send({
+            name: person.name,
+            about: nouns,
+            imageEndpoint: response.data.items[0].link
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      });
+  }
 });
 
 // Start the server

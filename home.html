@@ -3,23 +3,15 @@
   <head>
     <title>My App Engine App</title>
     <link type="text/css" rel="stylesheet" href="/static/css/main.css">
-    <script src="static/js/script.js"></script>
   </head>
   <body>
     <div class="wrapper">
         <p>Welcome Zoogler to your very own ...</p>
-        <h2 class="title">DESCRIPTION TO PICTURE APP</h2>
-        <p class="note">Don't worry, it is just a working title</p>
+        <h2 class="title">SeeMe app</h2>
         <p class="instructions">Enter your favourite book character description here:</p> 
-        <form method="POST" action="/submit">
-          <div>
-            <textarea name="paragraph" rows="10" cols="30" class="paragraph-input"></textarea>
-          </div>
-        </br>
-          <div>
-            <button type="submit">Show me the image</button>
-          </div>
-        </form>
+        <textarea name="paragraph" rows="10" cols="30" class="paragraph-input" class="paragraph"></textarea>
+        <button type="submit" class="button">Show me the image</button>
     </div>
+    <script src="static/js/script.js"></script>
   </body>
 </html>
