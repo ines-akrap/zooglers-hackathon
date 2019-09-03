@@ -3,6 +3,7 @@
 
 const express = require('express');
 const path = require(`path`);
+const https = require('https');
 const bodyParser = require('body-parser');
 const modules = require('./modules.js');
 const language = require('@google-cloud/language');
@@ -27,15 +28,30 @@ app.post('/submit', async (req, res) => {
   const [syntax] = await client.analyzeSyntax({document});
   
   const person = modules.getPerson(result.entities);
+  const nouns = modules.findNouns(syntax);
+  const imageEndpoint = modules.getImageUrl(nouns);
+  let image;
 
-  syntax.tokens.forEach((part) => {
-    console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
-    console.log(`Morphology:`, part.partOfSpeech);
-  });
-  
   res.send({
     name: person.name,
-    salience: person.salience
+    salience: person.salience,
+    imageEndpoint
+  });
+
+  https.get(imageEndpoint, (resp) => {
+    let data = '';
+
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    resp.on('end', () => {
+      image = JSON.parse(data).items[0].link;
+      console.log(image);
+    });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
   });
 });
 
