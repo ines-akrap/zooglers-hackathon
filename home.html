@@ -2,19 +2,24 @@
 <html>
   <head>
     <title>My App Engine App</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/main.css">
+    <script src="static/js/script.js"></script>
   </head>
   <body>
-    <h2>Hey there Zoogler .... </h2>
-    <p>Are you ready to test our awesome app ... </p>
-    <p>Enter your facourite book character description here:</p>
-    <form method="POST" action="/submit">
-      <div>
-        <input type="text" name="paragraph" placeholder="Insert paragraph">
-      </div>
-    </br>
-      <div>
-        <button type="submit">Show me the image</button>
-      </div>
-    </form>
+    <div class="wrapper">
+        <p>Welcome Zoogler to your very own ...</p>
+        <h2 class="title">DESCRIPTION TO PICTURE APP</h2>
+        <p class="note">Don't worry, it is just a working title</p>
+        <p class="instructions">Enter your favourite book character description here:</p> 
+        <form method="POST" action="/submit">
+          <div>
+            <textarea name="paragraph" rows="10" cols="30" class="paragraph-input"></textarea>
+          </div>
+        </br>
+          <div>
+            <button type="submit">Show me the image</button>
+          </div>
+        </form>
+    </div>
   </body>
 </html>
