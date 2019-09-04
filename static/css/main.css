@@ -2,6 +2,10 @@ body {
     background-color: lightgray;
 }
 
+.title {
+    font-size: 32px;
+}
+
 .wrapper {
     width: 400px;
     padding-top: 100px;
@@ -10,7 +14,7 @@ body {
 }
 
 .instructions {
-    padding-top: 50px;
+    padding-top: 20px;
 }
 
 .paragraph-input {
